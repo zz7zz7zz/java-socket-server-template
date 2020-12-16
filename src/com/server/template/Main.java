@@ -9,6 +9,9 @@ public class Main {
 
     public static void main(String [] args){
         MainNioServer.main_start(args); 
+//        MainBioServer.main_start(args);
+//        MainUdpNioServer.main_start(args);
+//        MainUdpBioServer.main_start(args);
     }
 
 }

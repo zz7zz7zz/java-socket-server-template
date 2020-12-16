@@ -3,12 +3,12 @@ package com.server.template;
 import com.open.net.server.GServer;
 import com.open.net.server.impl.tcp.nio.NioClient;
 import com.open.net.server.impl.tcp.nio.NioServer;
-import com.open.net.server.structures.AbstractClient;
-import com.open.net.server.structures.AbstractMessageProcessor;
-import com.open.net.server.structures.ServerConfig;
-import com.open.net.server.structures.ServerLog;
-import com.open.net.server.structures.ServerLog.LogListener;
-import com.open.net.server.structures.message.Message;
+import com.open.net.server.message.Message;
+import com.open.net.server.object.AbstractServerClient;
+import com.open.net.server.object.AbstractServerMessageProcessor;
+import com.open.net.server.object.ServerConfig;
+import com.open.net.server.object.ServerLog;
+import com.open.net.server.object.ServerLog.LogListener;
 import com.open.util.log.Logger;
 
 import java.io.IOException;
@@ -50,13 +50,13 @@ public final class MainNioServer {
     }
 
     //-------------------------------------------------------------------------------------------
-    public static AbstractMessageProcessor mMessageProcessor = new AbstractMessageProcessor() {
+    public static AbstractServerMessageProcessor mMessageProcessor = new AbstractServerMessageProcessor() {
 
         private ByteBuffer mWriteBuffer  = ByteBuffer.allocate(128*1024);
         private long oldTime = System.currentTimeMillis();
         private long nowTime  = oldTime;
         
-        protected void onReceiveMessage(AbstractClient client, Message msg){
+        protected void onReceiveMessage(AbstractServerClient client, Message msg){
 
             Logger.v("--onReceiveMessage()- rece  "+new String(msg.data,msg.offset,msg.length));
             String data ="MainNioServer--onReceiveMessage()--src_reuse_type "+msg.src_reuse_type
@@ -75,6 +75,7 @@ public final class MainNioServer {
             mWriteBuffer.clear();
         }
         
+        
 		@Override
 		public void onTimeTick() {
 			nowTime = System.currentTimeMillis();
@@ -85,12 +86,12 @@ public final class MainNioServer {
 		}
 
 		@Override
-		public void onClientEnter(AbstractClient client) {
+		public void onClientEnter(AbstractServerClient client) {
 			System.out.println("onClientEnter " + client.mClientId);
 		}
 
 		@Override
-		public void onClientExit(AbstractClient client) {
+		public void onClientExit(AbstractServerClient client) {
 			System.out.println("onClientExit " + client.mClientId);
 		}
     };
